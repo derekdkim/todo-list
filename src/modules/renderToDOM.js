@@ -1,4 +1,5 @@
 import { populateElement, addItemBtn } from './userInterface.js';
+import { createItemModalBox } from './itemModalBox.js';
 
 const renderList = (list) => {
     clearDiv('list-div');
@@ -24,15 +25,12 @@ const renderItems = (list) => {
 
         document.querySelectorAll('.item').forEach(elem => {
             elem.addEventListener('dblclick', (e) => {
-                alert(e.target.id.match(/[0-9]/));
-                const targetItem = list.itemArr[e.target.id.match(/[0-9]/)];
-                alert(JSON.stringify(targetItem));
-                targetItem.modifyDesc('test');
-                renderItems(list);
+                createItemModalBox(e.target.id.match(/[0-9]+/), list);
             });
         });
         
     } else {
+        clearDiv('item-container');
         const targetDiv = document.getElementById('item-container');
         populateElement('Nothing yet', 'p', 'nothing-msg', targetDiv);
     }
@@ -42,10 +40,24 @@ const renderItem = (item, id, targetDiv) => {
     const itemDiv = document.createElement('div');
     itemDiv.id = id;
     itemDiv.classList.add('item');
+    const checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';
+    if (item.complete) {
+        checkBox.checked = true;
+    }
+    itemDiv.appendChild(checkBox);
     populateElement(item.title, 'h2', `${id}-name`, itemDiv);
     populateElement(item.dueDate, 'h3', `${id}-date`, itemDiv);
-    populateElement(item.desc, 'p', `${id}-desc`, itemDiv);
+
     targetDiv.appendChild(itemDiv);
+
+    checkBox.addEventListener('change', (e) => {
+        if (checkBox.checked) {
+            item.complete = true;
+        } else {
+            item.complete = false;
+        }
+    });
 }
 
 const clearDiv = (divID) => {
@@ -57,4 +69,4 @@ const clearDiv = (divID) => {
     }
 }
 
-export { renderList, renderItems }
+export { renderList, renderItems, clearDiv }

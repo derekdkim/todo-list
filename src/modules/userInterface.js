@@ -9,6 +9,8 @@ const populateElement = (name, elemType, id, container) => {
     if (container) {
         container.appendChild(newElem);
     }
+
+    return newElem;
 }
 
 const createInterface = () => {
@@ -49,14 +51,6 @@ const createNewItemForm = (currentList) => {
             currentList.itemArr.push(newItem);
             itemInput.remove();
             renderItems(currentList);
-
-            /* TEMPORARY PIECE OF CODE FOR DEBUGGING. REMOVE THIS WHEN COMPLETE*/
-            // const targetDiv = document.getElementById('list-div');
-            // const test = document.createElement('div');
-            // test.textContent = currentList.itemArr.length;
-            // targetDiv.appendChild(test);
-            /* --------------------------------------------------------------- */
-
             addItemBtn(currentList);
         }
         if (e.key === 'Escape') {

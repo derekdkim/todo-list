@@ -6,9 +6,3 @@ createInterface();
 
 const newList = createList('Default');
 renderList(newList);
-
-document.addEventListener('click', (e) => {
-   if (e.target.className === 'item') {
-    alert('This is an item'); 
-   }
-});
