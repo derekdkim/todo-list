@@ -14,12 +14,9 @@ const createNewListForm = () => {
 
 const createList = (title) => {
     const itemArr = [];
+    let showComplete = false;
 
-    const modifyName = (text) => {
-        title = text;
-    }
-
-    return { title, itemArr, modifyName };
+    return { title, itemArr, showComplete };
 }
 
 export { createNewListForm, createList }

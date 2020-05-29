@@ -1,8 +1,10 @@
-import { populateElement, addItemBtn } from './userInterface.js';
+import { populateElement, addItemBtn, showHideCompletedBtn } from './userInterface.js';
 import { createItemModalBox } from './itemModalBox.js';
 
 const renderList = (list) => {
-    clearDiv('list-div');
+    showHideCompletedBtn(list);
+
+    clearDiv('list-div'); 
     const listDiv = document.getElementById('list-div');
     populateElement(list.title, 'h1', 'list-title', listDiv);
     
@@ -15,17 +17,28 @@ const renderList = (list) => {
 }
 
 const renderItems = (list) => {
+    // Rendering items if there's more than 0
     if (list.itemArr.length > 0) {
         clearDiv('item-container');
         const targetDiv = document.getElementById('item-container');
+        console.log(`Show Complete: ${list.showComplete}`)
 
         for (let i = 0; i < list.itemArr.length; i++) {
-            renderItem(list.itemArr[i], i, targetDiv);
+            if (list.showComplete) {
+                renderItem(list, i, targetDiv);
+            } else {
+                if (!list.itemArr[i].complete) {
+                    renderItem(list, i, targetDiv);
+                }
+            }
+
         }
 
         document.querySelectorAll('.item').forEach(elem => {
             elem.addEventListener('dblclick', (e) => {
-                createItemModalBox(e.target.id.match(/[0-9]+/), list);
+                if (e.target.type !== 'checkbox') {
+                    createItemModalBox(e.target.id.match(/[0-9]+/), list);
+                }
             });
         });
         
@@ -36,26 +49,36 @@ const renderItems = (list) => {
     }
 }
 
-const renderItem = (item, id, targetDiv) => {
+const renderItem = (list, id, targetDiv) => {
+    const item = list.itemArr[id];
     const itemDiv = document.createElement('div');
     itemDiv.id = id;
     itemDiv.classList.add('item');
+    
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
+    itemDiv.appendChild(checkBox);
+
+    const textContainer = document.createElement('div');
+    populateElement(item.title, 'h2', `${id}-name`, textContainer);
+    populateElement(item.dueDate, 'h3', `${id}-date`, textContainer);
+
     if (item.complete) {
         checkBox.checked = true;
+        textContainer.style.setProperty('text-decoration', 'line-through');
     }
-    itemDiv.appendChild(checkBox);
-    populateElement(item.title, 'h2', `${id}-name`, itemDiv);
-    populateElement(item.dueDate, 'h3', `${id}-date`, itemDiv);
 
+    itemDiv.appendChild(textContainer);
     targetDiv.appendChild(itemDiv);
 
     checkBox.addEventListener('change', (e) => {
         if (checkBox.checked) {
+            console.log('This is checked and will now change accordingly.');
             item.complete = true;
+            renderItems(list);
         } else {
             item.complete = false;
+            renderItems(list);
         }
     });
 }
