@@ -20,6 +20,7 @@ const createInterface = () => {
     populateElement('Clear Data', 'button', 'clear-btn', topNavDiv);
 
     const sideNavDiv = document.createElement('div');
+    sideNavDiv.id = 'side-nav-div';
 
     const listDiv = document.createElement('div');
     listDiv.id = 'list-div';

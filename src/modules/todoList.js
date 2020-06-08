@@ -8,7 +8,7 @@ const createNewListForm = () => {
     populateElement('Submit', 'button', 'submit-btn', formDiv);
 
     document.getElementById('submit-btn').addEventListener('click', () => {
-       const newList = createList(document.getElementById('list-input').value); 
+       return createList(document.getElementById('list-input').value); 
     });
 }
 
